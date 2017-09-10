@@ -9,12 +9,12 @@ class UnionFindFactoryTest {
   private final UnionFindFactory unionFindFactory = new UnionFindFactory();
 
   @Test
-  void shouldReturnNewInstanceOfUnionFind() {
+  void shouldReturnNewInstanceOfQuickFindUnionFind() {
     //given
     int expectedSize = 123;
-    UnionFind expectedUnionFind = new UnionFind(expectedSize);
+    UnionFind expectedUnionFind = new QuickFind(expectedSize);
     //when
-    UnionFind actualUnionFind = unionFindFactory.createUnionFind(expectedSize);
+    UnionFind actualUnionFind = unionFindFactory.createUnionFind(UnionFindType.QUICK_FIND, expectedSize);
     //then
     assertEquals(expectedUnionFind, actualUnionFind);
   }

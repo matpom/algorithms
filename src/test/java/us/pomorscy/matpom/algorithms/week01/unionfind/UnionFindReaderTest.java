@@ -2,6 +2,7 @@ package us.pomorscy.matpom.algorithms.week01.unionfind;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -32,10 +33,10 @@ class UnionFindReaderTest {
     //given
     UnionFindReader reader = new UnionFindReader("file_does_not_exist.txt", unionFindFactoryMock);
     //when
-    Executable readUnionFind = reader::readUnionFind;
+    Executable readUnionFind = () -> reader.readUnionFind(UnionFindType.QUICK_FIND);
     //then
     assertThrows(UnionFindException.class, readUnionFind);
-    verify(unionFindFactoryMock, never()).createUnionFind(anyInt());
+    verify(unionFindFactoryMock, never()).createUnionFind(any(), anyInt());
   }
 
   @Test
@@ -43,10 +44,10 @@ class UnionFindReaderTest {
     //given
     UnionFindReader reader = new UnionFindReader(FILE_NAME, unionFindFactoryMock);
     int expectedSize = 10;
-    UnionFind expectedUnionFind = new UnionFind(expectedSize);
-    when(unionFindFactoryMock.createUnionFind(expectedSize)).thenReturn(expectedUnionFind);
+    UnionFind expectedUnionFind = new QuickFind(expectedSize);
+    when(unionFindFactoryMock.createUnionFind(UnionFindType.QUICK_FIND, expectedSize)).thenReturn(expectedUnionFind);
     //when
-    UnionFind actualUnionFind = reader.readUnionFind();
+    UnionFind actualUnionFind = reader.readUnionFind(UnionFindType.QUICK_FIND);
     //then
     assertEquals(expectedUnionFind, actualUnionFind);
   }
@@ -57,9 +58,9 @@ class UnionFindReaderTest {
     UnionFindReader reader = new UnionFindReader(FILE_NAME, unionFindFactoryMock);
     UnionFind unionFindMock = Mockito.mock(UnionFind.class);
     when(unionFindMock.connected(anyInt(), anyInt())).thenReturn(false);
-    when(unionFindFactoryMock.createUnionFind(anyInt())).thenReturn(unionFindMock);
+    when(unionFindFactoryMock.createUnionFind(any(), anyInt())).thenReturn(unionFindMock);
     //when
-    reader.readUnionFind();
+    reader.readUnionFind(UnionFindType.QUICK_FIND);
     //then
     verify(unionFindMock, times(11)).connected(anyInt(), anyInt());
     verify(unionFindMock, times(11)).union(anyInt(), anyInt());

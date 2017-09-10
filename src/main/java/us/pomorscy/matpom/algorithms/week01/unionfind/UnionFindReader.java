@@ -17,10 +17,10 @@ class UnionFindReader {
     this.unionFindFactory = unionFindFactory;
   }
 
-  UnionFind readUnionFind() {
+  UnionFind readUnionFind(UnionFindType type) {
     try (Scanner scanner = new Scanner(
         new File(getClass().getClassLoader().getResource(fileName).getFile()))) {
-      UnionFind unionFind = unionFindFactory.createUnionFind(scanner.nextInt());
+      UnionFind unionFind = unionFindFactory.createUnionFind(type, scanner.nextInt());
       while (scanner.hasNext()) {
         int p = scanner.nextInt();
         int q = scanner.nextInt();
